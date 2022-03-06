@@ -1,0 +1,220 @@
+using System;
+// Составить описание класса прямоугольников со сторонами,
+// параллельными осям координат. Предусмотреть возможность
+// перемещения прямоугольников на плоскости, изменение размеров,
+// построение наименьшего прямоугольника, содержащего два заданных
+// прямоугольника, и прямоугольника, являющегося общей частью
+// (пересечением) двух прямоугольников.
+namespace Lab10_7
+{
+    public class Rectangle
+    {
+        // поля экземпляра класса 
+        public Coordinate A, B, C, D; //Координты прямоугольник
+        int width, height;
+
+        // поля класса 
+        static int count = 0;
+
+        static int Count  // реализация свойства (нет практического применения)
+        {
+            get
+            {
+                return count;
+            }
+            set {
+                count = value;
+                Console.WriteLine("Модификация count: {0}", count);
+            }
+        }
+
+
+
+
+        //конструктор
+        public Rectangle(Coordinate [] points) //создает прямоугольник со сторонами, параллельными осям координат      (принимает на вход массив  экземляров класса координат)
+        {
+            int[] Check = { 0, 0, 0, 0 };  // массив для проверки параллельности осям координат
+            for (int i = 0; i < 4; i++)
+                for (int j = 0; j < 4; j++)
+                    if ((points[i].x == points[j].x) || (points[i].y == points[j].y)) // если есть точка с такимиже координатами х или y добавляем 1 (по умолчанию 1, тк сравниваем ее с собой)
+                        Check[i] += 1;
+
+            foreach (int f in Check) //проверяем все ли элементы массива имеют значения 3 (условие параллельности осям координат) 
+                if (f != 3)
+                    throw new Exception("Прямоугольник не параллелен осям координат");
+            
+            this.A = points[0];// присваиваем значения экземпляру класса
+            this.B = points[1];
+            this.C = points[2];
+            this.D = points[3];
+            this.width = this.B.x - this.A.x;
+            this.height = this.D.y - this.A.y;
+            Count += 1;
+            info();// выводим информацию о созданном прямоугольнике
+        }
+
+        //методы
+        public void MoveX(int distance)//перемещаем по горизонтали на distance
+        {
+            this.A.x += distance;
+            this.B.x += distance;
+            this.C.x += distance;
+            this.D.x += distance;
+            info();
+        }
+
+        public void MoveY(int distance)//перемещаем по вертикали на distance
+        {
+            this.A.y += distance;
+            this.B.y += distance;
+            this.C.y += distance;
+            this.D.y += distance;
+            info();
+        }
+
+        public void ChangeX(int distance)//изменяем ширину на distance
+        {
+            if (distance < 0 && Math.Abs(distance) >= this.width)
+                throw new Exception("Введено значение больше длины прямоугольник");
+            this.B.x += distance;
+            this.C.x += distance;
+            this.width = this.B.x - this.A.x;
+            info();
+        }
+
+        public void ChangeY(int distance)//изменяем высоту на distance
+        {
+            if (distance < 0 && Math.Abs(distance) >= this.height)
+                throw new Exception("Введено значение больше ширины прямоугольник");
+            this.C.y += distance;
+            this.D.y += distance;
+            this.height = this.D.y - this.A.y;
+            info();
+        }
+
+        public void info () //вывод информации о прямоугольнике
+        {
+            Console.WriteLine("Прямоугольник \n A ({0},{1})  B({2},{3})  C({4},{5})  D({6},{7}) \n", this.A.x, this.A.y, this.B.x, this.B.y, this.C.x, this.C.y, this.D.x, this.D.y);
+        }
+
+
+        // построение минимального прямоугольника из двух заданных 
+        public static Rectangle BuildOneOfTwo(Rectangle first, Rectangle second)
+        {
+            Rectangle C;
+
+            // отношения шириныпервого к ширине второго
+            double WRatio = Convert.ToDouble(first.width) / Convert.ToDouble(second.width); 
+           //отношение высоты первого/второго
+            double HRatio = Convert.ToDouble(first.height) / Convert.ToDouble(second.height);
+            //разница отношений
+            double diffrance = WRatio - HRatio;
+
+            Console.WriteLine("WR{0}\nHR{1}\ndif{2}\n ", WRatio, HRatio, diffrance);
+
+            //проверяем куда лучше достроить прямоугольник
+
+            if (WRatio >= 1 && HRatio >= 1) //если 1 больше 2 и по высоте и по ширине
+            {
+                C = first;
+                if (diffrance >= 0)
+                    C.ChangeX(second.width);// достраиваем по горионтали
+                else
+                    C.ChangeY(second.height);// по вертикали
+            }
+            else if (WRatio > 1 && HRatio <= 1) // ширина 1 > 2 , но длина < 
+            {
+                C = first;
+                if (WRatio / HRatio > 1)
+                    C.ChangeY(second.height);
+                else
+                {
+                    C.ChangeX(second.width);
+                    C.D.y = second.D.y;
+                    C.C.y = second.C.y;
+                }
+
+            }
+            else if (WRatio <= 1 && HRatio > 1)
+            {
+                C = first;
+                C.ChangeY(second.height);
+                C.D.x = second.D.x;
+                C.C.x = second.C.x;
+            }
+            else // если 2 > 1
+            {
+                WRatio = Convert.ToDouble(second.width) / Convert.ToDouble(first.width);
+                HRatio = Convert.ToDouble(second.height) / Convert.ToDouble(first.height);
+                diffrance = WRatio - HRatio;
+                C = second;
+                if (diffrance >= 0)
+                    C.ChangeX(first.width);
+                else
+                    C.ChangeY(first.height);
+            }
+            return C;
+        }
+    }
+
+    public class Coordinate
+    {
+        public int x = 0;
+        public int y = 0;
+    }
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Coordinate A = new Coordinate();
+            Coordinate B = new Coordinate();
+            Coordinate C = new Coordinate();
+            Coordinate D = new Coordinate();
+
+            Coordinate A2 = new Coordinate();
+            Coordinate B2 = new Coordinate();
+            Coordinate C2 = new Coordinate();
+            Coordinate D2 = new Coordinate();
+
+            Coordinate[] Co = new Coordinate[4];
+
+
+            int x1 = Convert.ToInt32(Console.ReadLine());
+            int y1 = Convert.ToInt32(Console.ReadLine());
+
+            int x2 = Convert.ToInt32(Console.ReadLine());
+            int y2 = Convert.ToInt32(Console.ReadLine());
+
+
+            A.x = 0;  A.y = 0;
+            B.x = x1; B.y = 0;
+            C.x = x1; C.y = y1;
+            D.x = 0;  D.y = y1;
+
+            Co[0] = A;
+            Co[1] = B;
+            Co[2] = C;
+            Co[3] = D;
+
+            Rectangle first = new Rectangle(Co);
+
+            A2.x = 0;  A2.y = 0;
+            B2.x = x2;  B2.y = 0;
+            C2.x = x2;  C2.y = y2;
+            D2.x = 0;  D2.y = y2;
+
+            Co[0] = A2;
+            Co[1] = B2;
+            Co[2] = C2;
+            Co[3] = D2;
+
+            Rectangle second = new Rectangle(Co);           
+            second = Rectangle.BuildOneOfTwo(first, second);
+
+            Console.WriteLine("один из двух \n{0},{1}\n{2},{3}\n{4},{5}\n{6},{7}", second.A.x, second.A.y, second.B.x, second.B.y, second.C.x, second.C.y, second.D.x, second.D.y);
+
+            Console.Read();
+        }
+    }
+}
