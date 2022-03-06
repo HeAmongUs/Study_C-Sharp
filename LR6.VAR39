@@ -1,0 +1,47 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+//Даны целые числа k[0],...,k[n] (n=15). Найти наибольшее из них, которое кратно трем
+
+namespace ConsoleApp10
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n=15, m = 1,k=0,z=0;
+            int[] a = new int[15];
+            int[] c = new int[15];
+            Random c1 = new Random();
+            for (int i = 0; i < c.Length; i++)
+            {
+                c[i] = c1.Next(0, 15);
+                Console.WriteLine("Число     {0}      было сгенерировано и записано в последовательность ",c[i]);
+            }           
+                for (int j = 0; j < n; j++)
+                {             
+                z = c[j] % 3;
+                if (z == 0)
+                {
+                    a[k] = c[j];
+                    Console.WriteLine("В массив чисел кратных 3 записано число {0}", a[k]);
+                    k++;
+                }
+                else { }
+                }                
+                for (int  i= 0; i < n; i++)
+                {
+                if (a[i] > m)
+                {
+                    m = a[i];                    
+                }
+            }
+            Console.WriteLine("Наибольший член последовательности кратный трем {0}", m);
+            Console.Read();
+        }   
+    }
+}
+
