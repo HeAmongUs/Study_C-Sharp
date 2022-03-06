@@ -1,0 +1,96 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+/*Используя массивы, реализовать основные операции над множествами:
+− определение принадлежности элемента a множеству S;
+− добавление элемента а в S;
+− удаление элемента а из S;
+− объединение элементов двух множеств.*/
+
+namespace courseWorkTask2Var14
+{
+    public class Set
+    {
+        //setN универсальное множество - такое мноество, которое включает в себя все множества, которые могут быть рассмотрены в программме
+        //В качестве универсального множества берем латинский алфавит в нижнем и верхнем регистрах
+        private static string letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        private static char[] setN = letters.ToCharArray();
+
+        //set - множество экземпляра класса
+        public char[] set = new char[setN.Length];
+
+        public Set ()
+        {
+            for (int i = 0; i < this.set.Length; i++)
+            {
+                this.set[i] = ' ';
+            }
+        }
+
+        //Метод для проверки пренадлежности элемента множеству
+        public bool Contains(char c)
+        {
+            for (int i = 0; i < this.set.Length; i++)
+                if (this.set[i] == c)
+                    return true;
+            return false;
+        }
+
+        public static bool Allowed(char c)
+        {
+            if (letters.Contains(Convert.ToString(c)))
+                return true;
+            else return false;
+        }
+
+        //Метод для добавления элемента в множество
+        public void Add(char c)
+        {
+            if (!this.Contains(c) & Allowed(c))
+            {
+                for (int i = 0; i < this.set.Length; i++)
+                {
+                    if (this.set[i] == ' ')
+                    {
+                        this.set[i] = c;
+                        break;
+                    }
+                }
+            }
+        }
+
+        //Метод для добавления элемента из множества
+        public void Remove(char c)
+        {
+            for (int i = 0; i < this.set.Length; i++)
+            {
+                if (this.set[i] == c)
+                {
+                    this.set[i] = ' ';
+                    break;
+                }
+            }
+        }
+
+        //Метод объеденения двух множеств
+        public static Set operator +(Set a, Set b)
+        {
+            Set c = new Set();
+            for (int i = 0; i < a.set.Length; i++)
+            {
+                if (a.set[i] != ' ')
+                {
+                    c.Add(a.set[i]);
+                }
+                if (b.set[i] != ' ')
+                {
+                    c.Add(b.set[i]);
+                }
+            }
+            return c;
+        }
+    }
+}
