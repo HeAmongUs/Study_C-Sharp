@@ -1,0 +1,183 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+// 
+//1. Описать структуру с именем STUDENT, содержащую следующие поля:
+//    - фамилия и инициалы;
+//    - номер группы;
+//    - успеваемость(массив из пяти элементов). 
+
+//Написать программу, выполняющую следующие действия:
+//- ввод с клавиатуры данных в массив, состоящий из десяти структур типа STUDENT
+//    (записи должны быть упорядочены по возрастанию номера группы);
+
+//- вывод на экран фамилий и номеров групп для всех студентов, включенных в массив,
+//  если средний балл студента больше 4, 0 (если таких студентов нет, вывести соответствующее сообщение). 
+
+namespace LR13
+{
+     public  class NeRazvalivaetsyaSTRUCTURA
+    {
+        public static Student current;
+        public static Student[] save = new Student[10];
+        public static double sum = 0;
+        public static int j = 0;
+        public static bool Flag=false;
+        public static void Student()
+        {
+            for(j=0;j<= save.Length;j++)
+            {
+                Console.WriteLine("\n" +
+                    "Введите Фамилию");
+                current.Last_Name = Convert.ToString(Console.ReadLine());
+                save[j].Last_Name = current.Last_Name;
+                Console.WriteLine("Введите Имя");
+                current.First_Name = Convert.ToString(Console.ReadLine());
+                save[j].First_Name = current.First_Name;
+                Console.WriteLine("Отчество");
+                current.Patronymic = Convert.ToString(Console.ReadLine());
+                save[j].Patronymic = current.Patronymic;
+                Console.WriteLine("Введите Номер");
+                current.Group_Number = Convert.ToString(Console.ReadLine());
+                save[j].Group_Number = current.Group_Number;
+                Console.WriteLine("Введите оценки");
+                current.Perfomance = Console.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(i => double.Parse(i)).ToArray<double>();
+                save[j].Perfomance = current.Perfomance;
+                Console.Write("\n" +
+                    "{3}--{1} {0}.{2}      ",current.First_Name,current.Last_Name,current.Patronymic,current.Group_Number);
+                for (int k = 0; k < current.Perfomance.Length; k++)
+                {
+                    Console.Write(current.Perfomance[k]);
+                    sum = sum + current.Perfomance[k];
+                }
+                current.AVGPerfomance = sum /5;
+                save[j].AVGPerfomance = current.AVGPerfomance;
+                sum = 0;
+                Console.WriteLine("\n" +
+                    "{0}" ,current.AVGPerfomance);
+                Console.WriteLine("\n" +
+                    "");
+                Console.WriteLine("1 - продолжить\n" +
+                    "2 - закончить\n" +
+                    "");
+                int wd = int.Parse(Console.ReadLine());
+                if (wd == 2)
+                    goto DT;
+            }
+            DT:;
+        }
+        public static void getList()
+        {
+            double actual = 0;
+            int[] actualarray= new int [9];
+            int z ;
+            z = 0;
+            Console.WriteLine("Введите средний балл студента.\n" +
+                "Список студентов, чей средний бал больше введенго будет выведен в консоль.");
+            actual = double.Parse(Console.ReadLine());
+            for(int i=0; i<save.Length; i++)
+            {              
+                if (save[i].AVGPerfomance >= actual)
+                {
+                    actualarray[z] = i;
+                    Flag = true;
+                    z++;
+                }
+            }
+            if (Flag)
+            {
+                for (int i = 0; i <z; i++)
+                {
+                    Console.Write("\n" +
+                        "{3}--{1} {0}.{2}     \n" +
+                        " ", save[actualarray[i]].First_Name, save[actualarray[i]].Last_Name, save[actualarray[i]].Patronymic, save[actualarray[i]].Group_Number);
+                }
+            }
+            else
+                Console.WriteLine("Нет студентов с баллом > {0}", actual);
+        }
+        public static void GetPerfomance()
+        {
+            for (int i = 0; i < save.Length; i++)
+            {
+                Console.Write("\n" +
+                    "{3}--{1} {0}.{2}     \n" +
+                    " ", save[i].First_Name, save[i].Last_Name, save[i].Patronymic, save[i].Group_Number);
+
+
+                for (int k = 0; k < current.Perfomance.Length; k++)
+                {
+                    try { Console.Write(save[i].Perfomance[k]); }
+                    catch { }
+                }
+                Console.WriteLine();
+            }
+        }
+        public static void StudentCountine()
+        {
+            int wd = 1;
+            do {
+                
+                switch (wd)
+                { case 1:
+                        {
+                            for (j = 0; j <= save.Length; j++)
+                            {
+                                Console.WriteLine("\n" +
+                                    "Введите Фамилию");
+                                current.Last_Name = Convert.ToString(Console.ReadLine());
+                                save[j].Last_Name = current.Last_Name;
+                                Console.WriteLine("Введите Имя");
+                                current.First_Name = Convert.ToString(Console.ReadLine());
+                                save[j].First_Name = current.First_Name;
+                                Console.WriteLine("Отчество");
+                                current.Patronymic = Convert.ToString(Console.ReadLine());
+                                save[j].Patronymic = current.Patronymic;
+                                Console.WriteLine("Введите Номер");
+                                current.Group_Number = Convert.ToString(Console.ReadLine());
+                                save[j].Group_Number = current.Group_Number;
+                                Console.WriteLine("Введите оценки");
+                                current.Perfomance = Console.ReadLine().Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(i => double.Parse(i)).ToArray<double>();
+                                save[j].Perfomance = current.Perfomance;
+                                Console.Write("\n" +
+                                    "{3}--{1} {0}.{2}      ", current.First_Name, current.Last_Name, current.Patronymic, current.Group_Number);
+                                for (int k = 0; k < current.Perfomance.Length; k++)
+                                {
+                                    Console.Write(current.Perfomance[k]);
+                                    sum = sum + current.Perfomance[k];
+                                }
+                                current.AVGPerfomance = sum / 5;
+                                Console.WriteLine("\n" +
+                                    "");
+                                Console.WriteLine("1 - продолжить\n" +
+                                    "2 - закончить\n" +
+                                    "");
+                                wd = int.Parse(Console.ReadLine());
+
+                            }
+                            break;
+                        }
+                    case 2:
+                        {
+                            wd = 2;
+                            break;
+                        }
+                }               
+            }
+            while (wd == 1) ;
+        }
+    }
+    
+    public struct Student
+    {
+        public string First_Name;
+        public string Last_Name;
+        public string Patronymic;
+        public string Group_Number;
+        public double[] Perfomance;
+        public double AVGPerfomance;
+    }
+
+}
