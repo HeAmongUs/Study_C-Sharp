@@ -1,0 +1,182 @@
+using System;
+
+namespace LR12_7
+{
+    public class Rectangle
+    {
+        // поля экземпляра класса
+        public Coordinate LT, RB; //Координты прямоугольника
+        double width, height;
+        // поля класса 
+        static int count = 0;
+        static int Count  // реализация свойства 
+        {
+            get
+            {
+                return count;
+            }
+            set
+            {
+                count = value;
+                Console.WriteLine("Модификация count: {0}", count);
+            }
+        }
+        //конструктор
+        public Rectangle(Coordinate[] points)//создаем прямоугольников (принимает на вход массив  экземляров класса координат)
+        {
+            this.LT = points[0];// присваиваем значения экземпляру класса
+            this.RB = points[1];
+            this.width = this.RB.x - this.LT.x;
+            this.height = this.LT.y - this.RB.y;
+            Count += 1;
+            Info();// выводим информацию о созданном прямоугольнике
+        }
+
+        public void Info() //вывод информации о прямоугольнике
+        {
+            Console.WriteLine("Прямоугольник \n A ({0},{1})  B({2},{3})  C({4},{5})  D({6},{7}) \n", this.LT.x, this.LT.y, this.RB.x, this.LT.y, this.RB.x, this.RB.y, this.LT.x, this.RB.y);
+        }
+
+        public static bool operator >(Rectangle A, Rectangle B) //перегрузка оператора
+        {
+            if (A.width * A.height > B.width * B.height)
+                return true;
+            return false;
+        }
+        public static bool operator <(Rectangle A, Rectangle B) //перегрузка оператора
+        {
+            if (A.width * A.height < B.width * B.height)
+                return true;
+            return false;
+        }
+        public static bool operator ==(Rectangle A, Rectangle B) //перегрузка оператора
+        {
+            if (A.height == B.height && A.width == B.width)
+                return true;
+            return false;
+        }
+        public static bool operator !=(Rectangle A, Rectangle B) //перегрузка оператора
+        {
+            if (A.height != B.height && A.width != B.width)
+                return true;
+            return false;
+        }
+        public static Rectangle operator +(Rectangle A, Rectangle B)//перегрузка оператора
+        {
+            Rectangle C;
+            // отношения шириныпервого к ширине второго
+            double WRatio = Convert.ToDouble(A.width) / Convert.ToDouble(B.width);
+            //отношение высоты первого/второго
+            double HRatio = Convert.ToDouble(A.height) / Convert.ToDouble(B.height);
+            //разница отношений
+            double diffrance = WRatio - HRatio;
+
+            //проверяем куда лучше достроить прямоугольник
+            if (WRatio >= 1 && HRatio >= 1) //если 1 больше 2 и по высоте и по ширине
+            {
+                C = A;
+                if (diffrance >= 0)
+                    C.ChangeX(B.width);// достраиваем по горионтали
+                else
+                    C.ChangeY(B.height);// по вертикали
+            }
+            else if (WRatio > 1 && HRatio <= 1) // ширина 1 > 2 , но длина < 
+            {
+                C = A;
+                if (WRatio / HRatio > 1)
+                    C.ChangeY(B.height);
+                else
+                {
+                    C.ChangeX(B.width);
+                    C.RB.y = B.RB.y;
+                }
+
+            }
+            else if (WRatio <= 1 && HRatio > 1)
+            {
+                C = A;
+                C.ChangeY(B.height);
+                C.RB.x = B.RB.x;
+            }
+            else // если 2 > 1
+            {
+                WRatio = Convert.ToDouble(B.width) / Convert.ToDouble(A.width);
+                HRatio = Convert.ToDouble(B.height) / Convert.ToDouble(A.height);
+                diffrance = WRatio - HRatio;
+                C = B;
+                if (diffrance >= 0)
+                    C.ChangeX(A.width);
+                else
+                    C.ChangeY(A.height);
+            }
+            return C;
+        }
+        public static Rectangle operator *(Rectangle A, Rectangle B)//перегрузка оператора
+        {
+            Coordinate[] points = new Coordinate[2];
+            points[0] = new Coordinate();
+            points[1] = new Coordinate();
+            // если они не пересекаются
+            try
+            {
+                if (A.LT.x < B.LT.x && A.RB.x < B.LT.x ||  A.LT.y > B.LT.y &&  A.RB.y > B.LT.y || A.LT.x > B.LT.x && A.RB.x > B.LT.x || A.LT.y < B.LT.y && A.RB.y < B.LT.y)
+                {
+                    throw new Exception("Прямоугольники не пересекаются");
+                }
+                // Если один находится в другом
+                // Если B находится в A
+                else if (A.LT.x < B.LT.x && A.LT.y > B.LT.y && A.RB.x > B.RB.x && A.RB.y < B.RB.y)
+                {
+                    points[0] = B.LT;
+                    points[1] = B.RB;
+                }
+                // Если A находится в B
+                else if (B.LT.x < A.LT.x && B.LT.y > A.LT.y && B.RB.x > A.RB.x && B.RB.y < A.RB.y)
+                {
+                    points[0] = A.LT;
+                    points[1] = A.RB;
+                }
+                // если они пересекатся предположим что верхний левый угол первого прямоугольника всегда находится выше и левее аналогичного угла второго прямоугольника
+                else
+                {
+                    points[0].x = Math.Max(A.LT.x, B.LT.x);
+                    points[0].y = Math.Min(A.LT.y, B.LT.y);
+
+                    points[1].x = Math.Min(A.RB.x, B.RB.x);
+                    points[1].y = Math.Max(A.RB.y, B.RB.y);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return new Rectangle(points);
+        }
+        //методы
+        public void MoveX(double distance)
+        {
+            this.LT.x += distance;
+            this.RB.x += distance;
+        }
+        public void MoveY(double distance)
+        {
+            this.LT.y += distance;
+            this.RB.y += distance;
+        }
+        public void ChangeX(double distance)
+        {
+            this.RB.x += distance;
+            this.width = this.RB.x - this.LT.x;
+        }
+        public void ChangeY(double distance)
+        {
+            this.LT.y += distance;
+            this.height = this.LT.y - this.RB.y;
+        }
+    }
+    public class Coordinate
+    {
+        public double x = 0;
+        public double y = 0;
+    }
+}
