@@ -1,0 +1,103 @@
+namespace CombLib
+{
+
+// Библиотека комбинаторных подсчетов
+    public class Comb
+    {
+        private class AddFun_s //реализация вспомогательных функций
+        {
+            public static long Factorial(int n) // получение факториала числа
+            {
+                if (n == 1||n==0)
+                    return 1;
+                return Factorial(n - 1) * n;
+            }
+            public static double Pow(int value, int pow)  // Возведение в степень
+            {
+                if (pow == 0)
+                    return 1;
+                else
+                    return Pow(value, pow - 1) * value;
+            }
+            public static double ArrElMul(int n, int[] k)  // Произведение факториалов элементов массива
+            {
+                if (n == 0)
+                    return Factorial(k[n]);
+                else                
+                    return Factorial(k[n]) * ArrElMul(n - 1, k);
+            }
+        }
+
+        public static double CombWORep(int n, int m) // сочетание без повторения
+        {
+            if (n <= 0 || m < 0||m>n||m==0)
+                return -1; // throw new Exception("Получены недопустимые значения");            
+            double C;
+            C = AddFun_s.Factorial(n) / (AddFun_s.Factorial(m) * AddFun_s.Factorial(n - m));
+            return C;
+        }
+
+        public static double CombWithRep(int n, int m) // сочетание c повторением
+        {
+            if (n <= 0 || m < 0||m>n || m==0)
+                return -1;//   throw new Exception("Получены недопустимые значения");
+            double C;
+            C = AddFun_s.Factorial(n + m - 1) / (AddFun_s.Factorial(m) * AddFun_s.Factorial(n - 1));
+            return C;
+        }
+
+        public static double PlacementWORep(int n, int m) // Размещение без повторения
+        {
+            if (n <= 0 || m < 0||m>n||m==0)
+                return -1; //   throw new Exception("Получены недопустимые значения");
+            double A;
+            A = AddFun_s.Factorial(n) / AddFun_s.Factorial(n - m);
+            return A;
+        }
+
+        public static double PlacementWithRep(int n, int m) // Размещение c повторением
+        {
+            if (n <= 0 || m < 0||m>n||m==0)
+                return -1; //    throw new Exception("Получены недопустимые значения");
+            double A;
+            A = AddFun_s.Pow(n, m);
+            return A;
+        }
+
+        public static long PermutationWORep(int n) // Перестанови без повторения
+        {
+            if (n <= 0)
+                return -1; //    throw new Exception("Получены недопустимые значения");
+            long P;
+            P = AddFun_s.Factorial(n);
+            return P;
+        }
+
+        public static double PermutationWithRep(int n, int[] k) // Перестановки c повторением
+        {
+            //    throw new Exception("Получены недопустимые значения");
+            bool flag = true;
+            if (n <= 0 || k.Length >= n || k.Length <= 0)
+            {
+                return -1;
+            }
+            else
+            {
+                for (int i = 0; i < k.Length; i++)
+                {
+                    if (k[i] <= 0|| k[i] > n)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag != true)
+                    return -1;
+            }
+
+            double P;
+            P = AddFun_s.Factorial(n) / (AddFun_s.ArrElMul(k.Length - 1, k));
+            return P;
+        }
+    }
+}
