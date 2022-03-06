@@ -1,0 +1,97 @@
+using System;
+// Найти S − сумму элементов квадратной матрицы A из заштрихованной
+// области.
+// Заштрихованная область - ромб в центре матрицы
+namespace LR8
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool Flag = true; // хранит значение четности длины строки матрицы
+            Random x = new Random(); // создаем эекземпляр класс random
+            int len = x.Next(5, 11); // получаем случайное число от 5 до 11 включительно для длины строки матрицы
+            int[,] array = new int[len, len]; // создаем матрицу размером len/len
+            bool[,] flags = new bool[len,len]; // создаем матрицу для вывода символов которые попали в область матрица будет хранить значение true элемента, которые мы добавим к сумме
+            int sum = 0; // наш результат
+            for(int i =0; i< len; i++) //заплняем матрицу числами 0/1
+            {
+                for (int j = 0; j < len; j++)
+                    array[i, j] = x.Next(0, 2);
+            }
+            Console.Write("\n\n"); // пропускаем две строки
+            Console.ForegroundColor = ConsoleColor.Cyan;// меняем цвет консоли на берюзовый
+            for (int i = 0; i < len; i++) // выводим матрицу
+            {
+                for (int j = 0; j < len; j++)
+                    Console.Write("{0}  ", array[i, j]);
+                Console.Write("\n");
+            }
+            if (len % 2 == 1)
+                Flag = false; //получаем значение четного/ нечетного количества элементов в строке
+            int lenflag = len /2 + len%2; // вспомогательная переменная для уменьшения длины формул ниже
+            int start = lenflag;// хранит индекс элемента с которого мы начинаем прибавлять к сумме
+            int stop = lenflag;// хранит индекс элемента до которого(не включительно) прибавляем к сумме
+            for (int i = 0; i < len; i++)
+            {
+                if ((i == 0) && (!Flag))
+                {
+                    Console.WriteLine("матрица нечетная итерация 0");
+                    start = lenflag - 1;
+                }
+                else if ((Flag) && (i == lenflag - 1))
+                { Console.WriteLine("матрица четная верхняя середина"); }
+                else if ((!Flag) && (i == lenflag - 1))
+                {
+                    Console.WriteLine("матрица нечетная мы дошли до середины");
+                    start -= 1;
+                    stop += 1;
+                }
+                else if (i >= lenflag)
+                {
+                    start += 1;
+                    stop -= 1;
+                    Console.WriteLine(" мы прошли середину");
+                }
+                else if ((!Flag) && (i < lenflag - 1) && i != 0)
+                {
+                    Console.WriteLine("матрица нечетная мы не дошли до середины");
+                    start -= 1;
+                    stop += 1;
+                }
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                if (start-stop!=0)
+                    for (int j = start; j < stop; j++)
+                    {
+                        sum = sum + array[i, j];
+                        flags[i, j] = true;
+                        Console.Beep(31985,70);
+                        Console.WriteLine("\n SUM += {0}\n ", array[i, j]);
+                    }
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                if ((Flag) && (i < lenflag)) // находится внизу тк мы выводим две строки одинаковой длинны в середине матрицы в случае если длина строки четная
+                {
+                    Console.WriteLine("матрица четная мы не дошли до нижней середины");
+                    start -= 1;
+                    stop += 1;
+                }          
+            }
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            for (int i = 0; i < len; i++)//выводим цветную матрицу
+            {
+                for (int j = 0; j < len; j++)
+                {
+                    if (flags[i, j])
+                        Console.ForegroundColor = ConsoleColor.DarkBlue;
+                    Console.Write("{0}  ", array[i, j]);
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                }
+                Console.Write("\n");
+            }
+            Console.Write("\n");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine(sum);// выводим результат
+            Console.ReadLine();
+        }
+    }
+}
