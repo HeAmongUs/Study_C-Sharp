@@ -1,0 +1,227 @@
+using System;
+
+namespace LR12
+{
+	class Date
+	{
+		private int year = 0;
+		private int mounth = 0;
+		private int day = 0;
+
+		public Date(int year, int mounth, int day) //конструктор
+		{
+			SetDate(year, mounth, day); //вызов метода установки параметров
+		}
+
+		public int Year //свойство для поля "год"
+		{
+			get { return year; }
+			set
+			{
+				if (value > 2100 || value < 0)
+					Console.WriteLine("Недопустимое значение года");
+				else year = value;
+			}
+		}
+
+		public int Mounth //свойство для поля "месяц"
+		{
+			get { return mounth; }
+			set
+			{
+				if (value > 12 || value < 0)
+					Console.WriteLine("Недопустимое значение месяца");
+				else mounth = value;
+			}
+		}
+
+		public int Day //свойство для поля "день"
+		{
+			get { return day; }
+			set
+			{
+				if (mounth == 1 || mounth == 3 || mounth == 5 || mounth == 6 || mounth == 8 || mounth == 10 || mounth == 12)
+				{
+					if (value > 31 || value < 0)
+						Console.WriteLine("Недопустимое значение дня");
+					else day = value;
+
+				}
+				else if (mounth == 4 || mounth == 7 || mounth == 9 || mounth == 11)
+				{
+					if (value > 30 || value < 0)
+						Console.WriteLine("Недопустимое значение дня");
+					else day = value;
+				}
+				else if (mounth == 2)
+				{
+					if (value > 28 || value < 0)
+						Console.WriteLine("Недопустимое значение дня");
+					else day = value;
+				}
+				else
+                {
+					Console.WriteLine("Введите месяц перед вводом дня");
+				}
+			}
+		}
+
+		//Перегрузка метода
+		public void SetDate(int year, int mounth, int day) //метод установки полей
+		{
+			Year = year;
+			Mounth = mounth;
+			Day = day;
+		}
+		public void SetDate(int mounth, int day) 
+		{
+			Mounth = mounth;
+			Day = day;
+		}
+
+		public void SetDate(int day)
+		{
+			Day = day;
+		}
+
+		public void Print() //метод вывода полей текущего экземпляра
+		{
+			Console.WriteLine("Год: {0}\nМесяц: {1}\nДень: {2}", Year, Mounth, Day);
+		}
+				
+		// перегрузка операторов	
+		public static bool operator ==(Date A, Date B)
+		{
+			if (A.Day == B.Day & A.Mounth == B.Mounth & A.Year == B.Year)
+				return true;
+			return false;
+		}
+		public static bool operator !=(Date A, Date B)
+		{
+			if (A.Day != B.Day | A.Mounth != B.Mounth | A.Year != B.Year)
+				return true;
+			return false;
+		}
+		public static bool operator <(Date A, Date B)
+		{
+			if (A.Year > B.Year)
+				return false;
+			else if (A.Year == B.Year)
+				if (A.Mounth > B.Mounth)
+					return false;
+				else if (A.Mounth == B.Mounth)
+					if (A.Day > B.Day)
+						return false;
+					else if (A.Day == B.Day)
+						return false;
+			return true;
+		}
+		public static bool operator >(Date A, Date B)
+		{
+			if (A.Year > B.Year)
+				return true;
+			else if (A.Year == B.Year)
+				if (A.Mounth > B.Mounth)
+					return true;
+				else if (A.Mounth == B.Mounth)
+					if (A.Day > B.Day)
+						return true;
+					else if (A.Day == B.Day)
+						return false;
+			return false;
+		}
+	}
+
+	class Program
+	{
+		static void Main(string[] args)
+		{
+            Console.Write("Введите год: ");
+            int year = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Введите месяц: ");
+            int mounth = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Введите день: ");
+            int day = Convert.ToInt32(Console.ReadLine());
+
+            Date date = new Date(year, mounth, day); //создание экземпляра класса
+			Date date2 = new Date(1, 1, 1);
+
+			Console.Write("Enter для продолжения");
+			Console.ReadKey();
+
+			int q = 0;
+			while (q < 6)
+			{
+				Console.Clear();
+				date.Print();
+				Console.WriteLine("1. Изменить год\n2. Изменить месяц\n3. Изменить день\n4. Ввести вторую дату\n5. Получить операции над датами");
+				q = Convert.ToInt32(Console.ReadLine());
+				switch (q)
+				{
+					case 1:
+						{
+							date.Year = Convert.ToInt32(Console.ReadLine());
+							Console.ReadKey();
+							break;
+						}
+
+					case 2:
+						{
+							date.Mounth = Convert.ToInt32(Console.ReadLine());
+							Console.ReadKey();
+							break;
+						}
+
+					case 3:
+						{
+							int Day = Convert.ToInt32(Console.ReadLine());
+							date.SetDate(Day);
+							Console.ReadKey();
+							break;
+						}
+					case 4:
+						{
+							Console.Write("Введите год: ");
+							int y = Convert.ToInt32(Console.ReadLine());
+							Console.Write("Введите месяц: ");
+							int m = Convert.ToInt32(Console.ReadLine());
+							Console.Write("Введите день: ");
+							int d = Convert.ToInt32(Console.ReadLine());
+							date2.SetDate(m, d);
+							date2.Year = y;
+							break;
+						}
+					case 5:
+						{
+							bool equal = date == date2;
+							bool equal2 = date != date2;
+							bool compare2 = date < date2;
+							bool compare = date > date2;
+
+							Console.Write("Первая дата {0}.{1}.{2}\n" +
+								"Вторая дата {3}.{4}.{5}\n" +
+								"Первая дата == Вторая дата?\n" +
+								"{6}\n" +
+								"Первая дата != Вторая дата?\n" +
+								"{7}\n" +
+								"Первая дата > Вторая дата?\n" +
+								"{8}\n" +
+								"Первая дата < Вторая дата?\n" +
+								"{9}",
+								date.Day, date.Mounth, date.Year,
+								date2.Day, date2.Mounth, date2.Year,
+								equal, equal2,
+								compare, compare2);
+							Console.ReadKey();
+							break;
+						}
+				}
+			}
+
+		}
+
+	}
+
+}
