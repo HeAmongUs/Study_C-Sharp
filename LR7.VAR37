@@ -1,0 +1,70 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+// Дана целочисленная матрица размером m×n. Получить сумму наибольшего значения элементов матрицы и наименьшего в этой же строке
+
+namespace ConsoleApp3
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int n = 0, m = 0, y = 0;
+            Console.WriteLine("введите количество строк");
+            n = int.Parse(Console.ReadLine());
+            Console.WriteLine("введите количество столбцов");
+            m = int.Parse(Console.ReadLine());
+
+            int[,] A = new int[n, m];
+            Random x = new Random();
+            Console.WriteLine();
+            // Заполнение матрицы
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    A[i, j] = x.Next(-5, 5);
+                    if (y < j)
+                    {
+                        Console.Write("{0}  ", A[i, j]);
+                       y++;
+                    }
+                    else
+                    {
+                        Console.WriteLine();
+                        Console.Write("{0}  ", A[i, j]);
+                        y = 0;
+                    }
+
+                }
+            }
+            Console.Read();
+            
+            for (int i=0;i<n; i++)
+            {
+                    int max = A[i, 0];
+                    int min = A[i, 0];
+                    for (int j=0;j<m; j++)
+                    {
+                        
+                        if (A[i, j] > max)
+                        {  max= A[i, j]; }
+                        else
+                        {
+                            if (A[i, j] < min)
+                            {  min= A[i, j] ; }
+                        }
+                        Console.WriteLine("Строка {0} MAX{1} MIN{2}",i, max, min);
+                        int s = max + min;
+                        Console.WriteLine("Строка {0} Сумма равно {1}", i, s);
+                    }
+                    
+                    Console.WriteLine();
+            }
+            Console.Read();
+        }
+    }
+}
