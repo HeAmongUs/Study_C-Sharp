@@ -1,0 +1,29 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+// Удалить часть символьной строки, заключенной в скобки (вместе со скобками).
+namespace ConsoleApp5
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {//Удалить часть символьной строки, заключенной в скобки (вместе со скобками ) 
+         
+
+            string text = "Удалить часть символьной строки, заключенной в скобки (вместе со скобками).";
+            char[] text_ar = text.ToCharArray();
+            bool flag = true;
+            string res = string.Empty;
+            for (int i = 0; i < text_ar.Length; i++)
+            {
+                if (text_ar[i] == '(') flag = false;
+                else if (text_ar[i] == ')') flag = true;
+                else if (flag) res += text_ar[i];
+            }
+            Console.WriteLine(res);
+            Console.Read();
+        }
+    }
+}
