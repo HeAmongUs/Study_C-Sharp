@@ -1,0 +1,206 @@
+using System;
+
+namespace LR12_18
+{
+    class Clocks
+    {
+        private int hours = 0;
+        private int minuts = 0;
+        private int seconds = 0;
+
+        public Clocks(int hours, int minuts, int seconds)
+        {
+            SetTime(hours, minuts, seconds);
+        }
+
+        public Clocks() { }
+
+        public int Hours
+        {
+            get { return hours; }
+            set
+            {
+                if (value > 23 || value < 0)
+                    Console.WriteLine("Недопустимое количество часов");
+                else hours = value;
+            }
+        }
+
+        public int Minutes
+        {
+            get { return minuts; }
+            set
+            {
+                if (value > 59 || value < 0)
+                    Console.WriteLine("Недопустимое количество минут");
+                else minuts = value;
+            }
+        }
+        public int Seconds
+        {
+            get { return seconds; }
+            set
+            {
+                if (value > 59 || value < 0)
+                    Console.WriteLine("Недопустимое количество секунд");
+                else seconds = value;
+            }
+        }
+
+        //Перегрузка метода
+        public void SetTime(int hours, int minuts, int seconds)
+        {
+            Hours = hours;
+            Minutes = minuts;
+            Seconds = seconds;
+        }
+        public void SetTime(int hours, int minuts)
+        {
+            Hours = hours;
+            Minutes = minuts;
+        }
+        public void SetTime(int hours)
+        {
+            Hours = hours;
+        }
+
+        public void Print()
+        {
+            Console.WriteLine("Часы: {0}\nМинуты: {1}\nСекунды: {2}", hours, minuts, seconds);
+        }
+
+        //перегрузка операторов сложения и вычитания
+        public static Clocks operator +(Clocks A, Clocks B)
+        {
+            Clocks C = new Clocks();
+            int h = A.Hours + B.Hours;
+            int m = A.Minutes + B.Minutes;
+            int c = A.Seconds + B.Seconds;
+            if (c > 60)
+            {
+                c %= 60;
+                m += 1;
+            }
+            if (m > 60)
+            {
+                m %= 60;
+                h += 1;
+            }
+            C.Hours = h % 24;
+            C.Minutes = m;
+            C.Seconds = c;
+            return C;
+        }
+        public static Clocks operator -(Clocks A, Clocks B)
+        {
+            Clocks C = new Clocks();
+            int h = A.Hours - B.Hours;
+            int m = A.Minutes - B.Minutes;
+            int c = A.Seconds - B.Seconds;
+            if (c < 0)
+            {
+                c = 60 + c;
+                m -= 1;
+            }
+            if (m < 0)
+            {
+                m = 60 + m;
+                h -= 1;
+            }
+            if (h < 0)
+                h = 24 + h;
+            C.Hours = h;
+            C.Minutes = m;
+            C.Seconds = c;
+            return C;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Write("Введите количество часов: ");
+            int hours = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Введите количество минут: ");
+            int minutes = Convert.ToInt32(Console.ReadLine());
+
+            Console.Write("Введите количество секунд: ");
+            int seconds = Convert.ToInt32(Console.ReadLine());
+            Clocks time = new Clocks(hours, minutes, seconds);
+            Clocks b = new Clocks();
+            Console.ReadKey();
+            int q = 0;
+            while (q < 6)
+            {
+                Console.Clear();
+                time.Print();
+                Console.WriteLine("1. Изменить время\n2. Изменить часы и минуты\n3. Изменить часы\n4. Ввести второе время\n5. Получить сумму и разность\n6. Выход из программы");
+                q = Convert.ToInt32(Console.ReadLine());
+                switch (q)
+                {
+                    case 1:
+                        {
+                            Console.Write("Введите количество часов: ");
+                            int h = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Введите количество минут: ");
+                            int m = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Введите количество секунд: ");
+                            int s = Convert.ToInt32(Console.ReadLine());
+                            time.SetTime(h, m, s); //используем перегруженный метод
+                            Console.ReadKey();
+                            break;
+                        }
+
+                    case 2:
+                        {
+                            Console.Write("Введите количество часов: ");
+                            int h = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Введите количество минут: ");
+                            int m = Convert.ToInt32(Console.ReadLine());
+                            time.SetTime(h, m); //используем перегруженный метод
+                            Console.ReadKey();
+                            break;
+                        }
+
+                    case 3:
+                        {
+                            Console.Write("Введите количество часов: ");
+                            int h = Convert.ToInt32(Console.ReadLine());
+                            time.SetTime(h); //используем перегруженный метод
+                            Console.ReadKey();
+                            break;
+                        }
+                    case 4:
+                        {
+                            Console.Write("Введите количество часов: ");
+                            b.Hours = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Введите количество минут: ");
+                            b.Minutes = Convert.ToInt32(Console.ReadLine());
+                            Console.Write("Введите количество секунд: ");
+                            b.Seconds = Convert.ToInt32(Console.ReadLine());
+                            Console.ReadKey();
+                            break;
+                        }
+                    case 5:
+                        {
+                            Console.Write("\nA\n");
+                            time.Print();
+                            Console.Write("B\n");
+                            b.Print();
+                            Clocks C;
+                            C = time + b; //используем перегруженный оператор
+                            Console.Write("\nСумма\n\n");
+                            C.Print();
+                            Console.Write("\nРазность\n\n");
+                            C = time - b; //используем перегруженный оператор
+                            C.Print();
+                            Console.ReadKey();
+                            break;
+                        }
+                }
+            }
+        }
+    }
+}
