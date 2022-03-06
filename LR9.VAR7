@@ -1,0 +1,34 @@
+using System;
+/*
+Дана последовательность, состоящая из 10 слов. Напечатать те слова
+последовательности, в которых первая буква слова входит в него еще
+раз.
+*/
+namespace LR9
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string STR; // вводимая строка
+            char sep; // символ разделения слов
+            string[] array = new string[10]; // массив для хранения слов
+            Console.WriteLine("Введите строку");
+            STR = Console.ReadLine();
+            Console.WriteLine("Введите сепаратор,'символ разделения слов'(одиночный)");
+            sep = Convert.ToChar(Console.ReadLine());
+            array = STR.Split(sep); // записываем в массив строк разбитую на слова вводимую строку
+            foreach (string x in array) //достаем строки из массива по очереди
+            {
+                for (int i = 1;i < x.Length; i++) // начиная с первого индекса (сравниваем с нулевым)
+                {
+                    if (x[0] == x[i]) // если находим символ в слове равный первому печатем слово и выходим из вложеного цикла
+                    {
+                        Console.WriteLine(x);
+                        break;
+                    }
+                }
+            } 
+        }
+    }
+}
