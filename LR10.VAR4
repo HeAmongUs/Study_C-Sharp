@@ -1,0 +1,212 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+/*
+Задание #4 
+Построить описание класса, содержащего информацию о почтовом адресе организации. 
+Предусмотреть возможность раздельного изменения составных частей адреса.
+*/
+
+namespace LR10.VAR4
+{
+    class Adress
+    {
+        string Department, Name, StreetName, City, Country;
+        int BuildNumber, Index;
+
+        public Adress(string Department, string Name, string StreetName, string City,
+            string Country, int BuildNumber, int Index)
+        {
+            this.Index = Index;
+            this.City = City;
+            this.BuildNumber = BuildNumber;
+            this.Country = Country;
+            this.Department = Department;
+            this.Name = Name;
+            this.StreetName = StreetName;
+        }
+
+        public string SD()
+        {
+            Department = Console.ReadLine();
+            return Department;
+        }
+        public string SN()
+        {
+            Name = Console.ReadLine();
+            return Name;
+        }
+        public string SSN()
+        {
+            StreetName = Console.ReadLine();
+            return StreetName;
+        }
+        public string SCity()
+        {
+            City = Console.ReadLine();
+            return City;
+        }
+        public string SC()
+        {
+            Country = Console.ReadLine();
+            return Country;
+        }
+        public int SBN()
+        {
+            BuildNumber = Convert.ToInt32(Console.ReadLine());
+            return BuildNumber;
+        }
+        public int SI()
+        {
+            Index = Convert.ToInt32(Console.ReadLine());
+            return Index;
+        }
+        public void Default()
+        {
+            Console.WriteLine(" \n" +
+                " Отделение организации: {0}\n" +
+                " Название организации: {1}\n" +
+                " Улица {2} {3}\n" +
+                " Город {4}, индекс {5}\n" +
+                " Страна: {6}\n",
+                 Department, Name, StreetName, BuildNumber, City, Index, Country);
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.Title = "LR10.VAR4 Построить описание класса, содержащего информацию о почтовом адресе организации. ";
+            Adress Default = new Adress("ИКСиИБ КТиИБ", "КубГТУ", "Красная", "Krd", "Российская Федерация", 91, 350000);
+            
+            int L = 1;
+            Console.Clear();
+            do
+            {
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.WriteLine("\n" +
+                    " 1 - Ввести название отделения организации\n" +
+                    " 2 - Ввести название организации\n" +
+                    " 3 - Ввести название улицы\n" +
+                    " 4 - Ввести номер дома\n" +
+                    " 5 - Ввести город\n" +
+                    " 6 - Ввести почтовый индекс\n" +
+                    " 7 - Ввести название страны     \n" +
+                    " 8 - Выход \n" +
+                    " 0 - Получить информацию о почтовом адресе\n" +
+                    "  \n" +
+                    " ");
+                try
+                { L = Convert.ToInt32(Console.ReadLine()); }
+                catch
+                {
+                    Console.Clear();
+                    Console.WriteLine("\n" +
+                        " Введено недопустимое значение.\n" +
+                        "");
+                    L = 8;
+                }
+                switch (L)
+                {
+                    case 1:
+                        {
+                            Console.Clear();
+                            Console.WriteLine(" \n" + "Введите название отделения организации\n" + "");
+                            Default.SD(); break;
+                        }
+                    case 2:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\n" +
+                                " Введите название организации\n" +
+                                "");
+                            Default.SN(); break;
+                        }
+                    case 3:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\n" +
+                                " Введите название улицы\n" +
+                                "");
+                            Default.SSN(); break;
+                        }
+                    case 4:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\n" +
+                                " Введите номер дома\n" +
+                                "");
+                            
+                            try
+                            {
+                                Default.SBN();
+                            }
+                            catch
+                            {
+                                Console.WriteLine("\n" +
+                                    "Введено недопустимое значение");
+                            }
+                            break;
+                        }
+                    case 5:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\n" +
+                                " Введите название города\n" +
+                                "");
+                            Default.SCity(); break;
+                        }
+                    case 6:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\n" +
+                                " Введите почтовый индекс\n" +
+                                "");
+                            try
+                            {
+                                Default.SI();
+                            }
+                            catch
+                            {
+                                Console.WriteLine("\n" +
+                                    "Введено недопустимое значение");
+                            }
+                            break;
+                        }
+                    case 7:
+                        {
+                            Console.Clear();
+                            Console.WriteLine("\n" +
+                                "Введите название страны\n" +
+                                "");
+                            Default.SC();
+                            break;
+                        }
+                    case 8:
+                        {
+                            L = 8;
+                            break;
+                        }
+                    case 0:
+                        {
+                            Default.Default();
+                            Console.WriteLine(" \n" +
+                                "Нажмите ВВОД для продолжения");
+                            Console.Read();
+                            Console.Clear();
+                            break;
+                        }
+                }
+            }
+            while (L >= 0 && L <= 7 );
+            Console.Clear();
+            Console.WriteLine("\n" +
+                "Завершение работы алгоритма");
+            Console.Read();
+        }
+    }
+}
