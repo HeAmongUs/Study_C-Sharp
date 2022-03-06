@@ -1,0 +1,56 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+/*Создать массив целых чисел и массив вещественных чисел и преобразовать их в вещественный, исключить из ПОСЛКДОВАТЕЛЬНОСТИ числа равные 0 */
+
+namespace ConsoleApp2
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int z=0;
+            
+            int[] c = new int[10];
+            Random c1 = new Random();
+            for (int i = 0; i < c.Length; i++)
+            { c[i] = c1.Next(-2, 2);
+              
+            }
+            double[] b = new double[10];
+            Random b1 = new Random();
+
+            for (int i = 0; i < b.Length; i++)
+            {
+                b[i] = b1.NextDouble();
+               
+            }   
+            double[] a = new double[10];
+            for (int i = 0; i < a.Length; i++)
+            {
+                a[i] = b[i] + c[i];
+                if (a[i] == 0)
+                { Console.WriteLine(); }
+                Console.WriteLine(a[i] + " ");
+            }
+            Console.WriteLine(" ");
+            double[] s = new double[10];
+            foreach (double x in a)
+                
+            {
+                if (x == 0)                 
+                  z++;                
+                else
+                {
+                    s[z] = a[z];
+                    Console.WriteLine(s[z] + " ");
+                    z++;
+                }
+            }
+            Console.Read(); 
+        }
+    }
+}
