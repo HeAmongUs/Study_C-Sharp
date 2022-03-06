@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+// 17. Дан файл f, компоненты которого являются целыми числами. Число
+// компонентов файла делится на 100. Записать в файл g наибольшее
+// значение первых ста компонентов файла f, затем - следующих ста
+// компонентов и т.д.
+// 18. Из условия предыдущей задачи удаляется предположение о том, что
+// число компонентов файла f делится на 100. Если в последней группе
+// окажется менее ста компонентов, то последний компонент файла g
+// должен быть равен наибольшему из компонентов файла f, образующих
+// последнюю (неполную) группу.
+
+namespace LR14
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string path1 = @"C:\forSave\f.txt";
+            string path2 = @"C:\forSave\g.txt";
+
+            Random x = new Random();
+            int[] inf = new int[x.Next(550, 1110)];
+
+            for (int i = 0; i < inf.Length; i++)
+                inf[i] = x.Next(1, 101);
+
+            string infToF = inf[0].ToString();
+
+            for (int i = 1; i < inf.Length; i++)
+                infToF += " " + inf[i].ToString();
+
+            StreamWriter sw = new StreamWriter(path1, false);
+            sw.Write(infToF);
+            sw.Close();
+
+            StreamReader sr = new StreamReader(path1, Encoding.Default);
+            string[] infFromF = sr.ReadToEnd().Split(' ');
+            sr.Close();
+
+            List<int> maxList = new List<int>();
+            int max = Convert.ToInt32(infFromF[0]);
+            for (int i = 0; i < infFromF.Length; i++)
+            {
+                if (Convert.ToInt32(infFromF[i]) > max)
+                    max = Convert.ToInt32(infFromF[i]);
+                if (i == infFromF.Length - 1)    
+                    maxList.Add(max);
+                else if ((i + 1) % 100 == 0)
+                {
+                    maxList.Add(max);
+                    max = Convert.ToInt32(infFromF[i]);
+                }
+            }
+
+            string infToG = maxList[0].ToString();
+            for (int i = 1; i < maxList.Count; i++)
+                infToG += " " + maxList[i].ToString();
+
+            sw = new StreamWriter(path2, false);
+            sw.Write(infToG);
+            sw.Close();
+
+            sr = new StreamReader(path2, Encoding.Default);
+            Console.WriteLine("Максимыльные элементы в группах по 100 и в неполной группе:\n{0}",sr.ReadToEnd());
+            sr.Close();
+
+            Console.ReadKey();
+        }
+    }
+}
