@@ -1,0 +1,84 @@
+using System;
+
+namespace LR11_18
+{
+/*    Определить метод нахождения корней нелинейных уравнений вида f(x)=0 методом половинного деления,
+      a * x^4 + b * x^2 + c * x + d = 0.
+*/
+    class Program
+    {
+        static double
+            a, //коэффициент при x^4
+            b, //коэффициент при x^2
+            c, //коэффициент при x
+            d, //константа
+            left, //левая граница интервала
+            right, //правая граница интервала
+            e = 0.001; //погрешность
+        private static double function(double x)
+        {
+            double y = a * Math.Pow(x, 4) + b * Math.Pow(x, 2) + c * x + d;
+            Console.WriteLine("Вычислено:\n  при х = {0}, \n  y = {1}", x, y);
+            return y; 
+        }
+
+        private static double FindResolve(double left, double right)
+        {
+            double dx, f_dx;
+
+            double f_l = function(left); //получение начальных значений
+            double f_r = function(right);
+
+            //проверка начальных значений (являются ли они корнями уравнения)
+            if (f_l == 0)
+                return left;
+            else if (f_r == 0)
+                return right;
+            else
+            {
+                double x_i = 0;
+                while (right - left > e) //проверяем точность вычислений
+                {
+                    dx = (right - left) / 2; //получаем половину длины
+                    x_i = left + dx; //получаем середину интервала
+
+                    f_l = function(left);
+                    f_dx = function(dx);
+
+                    if (f_l * f_dx < 0) //если полученные значения имеют разные знаки, то смещаем правую границу иначе смещаем левую
+                    {
+                        Console.WriteLine("Правая граница смещена до {0}", x_i);
+                        right = x_i;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Левая граница смещена до {0}", x_i);
+                        left = x_i;
+                    }
+                    Console.WriteLine("------------------------------\n");
+                }
+                return x_i;
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Введите коэффициент при x^4");
+            a = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Введите коэффициент при x^2");
+            b = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Введите коэффициент при x");
+            c = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Введите константу");
+            d = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Введите левую границу интервала");
+            left = Convert.ToDouble(Console.ReadLine());
+            Console.WriteLine("Введите правую границу интервала");
+            right = Convert.ToDouble(Console.ReadLine());
+
+            double res = FindResolve(left, right);
+            Console.WriteLine("Корень уравнения с точностью до {1} = {0}", res, e);
+            Console.ReadKey();
+        }
+    }
+}
